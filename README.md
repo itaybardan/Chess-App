@@ -1,2 +1,3 @@
-# chessapp
-chess app based AI - nega-max algorithm
+# Chess App
+my chess application written in java 
+using nega-max algorithm
