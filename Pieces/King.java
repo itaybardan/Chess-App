@@ -68,7 +68,7 @@ public class King {
             }
        
         }
-        //System.out.println("ps "+Long.toHexString(PossibleMoves));
+        
         return PossibleMoves;
     }
 
