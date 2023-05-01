@@ -571,7 +571,7 @@ public class Game {
             int Special = this.getMoveSpecialId(place, lowBit, Serial);
             Move move = new Move(Origin, lowBit, Serial, this.getTypeBit(lowBit), Special);
             this.DoMove(move);
-            if (!this.isKingUnderThreat(isPlayerPiece))
+            if (this.isKingNotUnderThreat(isPlayerPiece))
                 legalMoves |= lowBit;
 
             PossibleMoves ^= lowBit;
@@ -604,7 +604,7 @@ public class Game {
 
             }
 
-            if (!this.isKingUnderThreat(true))
+            if (this.isKingNotUnderThreat(true))
                 return -50000;
         } else {
             for (int i = 0; i < 6; i++) {
@@ -614,7 +614,7 @@ public class Game {
 
             }
 
-            if (!this.isKingUnderThreat(false))
+            if (this.isKingNotUnderThreat(false))
                 return -1;
         }
 
@@ -659,7 +659,7 @@ public class Game {
         return false;
     }
 
-    public boolean isKingUnderThreat(boolean PlayerTurn) {
+    public boolean isKingNotUnderThreat(boolean PlayerTurn) {
         long temp;
         long myKing = PlayerTurn ? this.Player.PiecesPosition[5] : this.Computer.PiecesPosition[5];
         long pawnPos;
@@ -672,7 +672,7 @@ public class Game {
 
         if (PlayerTurn) {
             pawnPos = ((this.Computer.PiecesPosition[0] & 0xfefefefefefefefeL) >>> 9) | ((this.Computer.PiecesPosition[0] & 0x7f7f7f7f7f7f7f7fL) >>> 7);
-            if ((myKing & pawnPos) != 0) return true;
+            if ((myKing & pawnPos) != 0) return false;
 
             knightPos = (this.Computer.PiecesPosition[2] & 0x7f7f7f7f7f7f7f7fL) << 17 |
                     (this.Computer.PiecesPosition[2] & 0xfefefefefefefefeL) << 15 |
@@ -682,11 +682,11 @@ public class Game {
                     (this.Computer.PiecesPosition[2] & 0x7f7f7f7f7f7f7f7fL) >>> 15 |
                     (this.Computer.PiecesPosition[2] & 0xfcfcfcfcfcfcfcfcL) >>> 10 |
                     (this.Computer.PiecesPosition[2] & 0x3f3f3f3f3f3f3f3fL) >>> 6;
-            if ((myKing & knightPos) != 0) return true;
+            if ((myKing & knightPos) != 0) return false;
 
-            if (this.Computer.PiecesPosition[5] == 0x0L) return true; // temporary
+            if (this.Computer.PiecesPosition[5] == 0x0L) return false; // temporary
             if ((myKing & KingAllPossibleMoves[Long.numberOfTrailingZeros(this.Computer.PiecesPosition[5])]) != 0)
-                return true;
+                return false;
 
             temp = myKing << 8;
             endValue = (7 - (place / 8));
@@ -694,7 +694,7 @@ public class Game {
             {
                 if ((temp & this.AllOccupiedPlaces) != 0) {
                     if ((temp & (this.Computer.PiecesPosition[1] | this.Computer.PiecesPosition[4])) != 0)
-                        return true;
+                        return false;
                     break;
 
                 }
@@ -705,7 +705,7 @@ public class Game {
             {
                 if ((temp & this.AllOccupiedPlaces) != 0) {
                     if ((temp & (this.Computer.PiecesPosition[1] | this.Computer.PiecesPosition[4])) != 0)
-                        return true;
+                        return false;
                     break;
 
                 }
@@ -716,7 +716,7 @@ public class Game {
             {
                 if ((temp & this.AllOccupiedPlaces) != 0) {
                     if ((temp & (this.Computer.PiecesPosition[1] | this.Computer.PiecesPosition[4])) != 0)
-                        return true;
+                        return false;
                     break;
 
                 }
@@ -727,18 +727,18 @@ public class Game {
             {
                 if ((temp & this.AllOccupiedPlaces) != 0) {
                     if ((temp & (this.Computer.PiecesPosition[1] | this.Computer.PiecesPosition[4])) != 0)
-                        return true;
+                        return false;
                     break;
 
                 }
                 temp >>>= 1;
             }
             temp = myKing << 9;
-            for (int i = 0; i < minPlace; i++) // up right
+            for (int i = 0; i < minUpRightPlace; i++) // up right
             {
                 if ((temp & this.AllOccupiedPlaces) != 0) {
                     if ((temp & (this.Computer.PiecesPosition[3] | this.Computer.PiecesPosition[4])) != 0)
-                        return true;
+                        return false;
                     break;
                 }
                 temp <<= 9;
@@ -748,7 +748,7 @@ public class Game {
             {
                 if ((temp & this.AllOccupiedPlaces) != 0) {
                     if ((temp & (this.Computer.PiecesPosition[3] | this.Computer.PiecesPosition[4])) != 0)
-                        return true;
+                        return false;
                     break;
                 }
                 temp >>>= 7;
@@ -758,7 +758,7 @@ public class Game {
             {
                 if ((temp & this.AllOccupiedPlaces) != 0) {
                     if ((temp & (this.Computer.PiecesPosition[3] | this.Computer.PiecesPosition[4])) != 0)
-                        return true;
+                        return false;
                     break;
                 }
                 temp >>>= 9;
@@ -768,7 +768,7 @@ public class Game {
             {
                 if ((temp & this.AllOccupiedPlaces) != 0) {
                     if ((temp & (this.Computer.PiecesPosition[3] | this.Computer.PiecesPosition[4])) != 0)
-                        return true;
+                        return false;
                     break;
                 }
                 temp <<= 7;
@@ -778,7 +778,7 @@ public class Game {
 
         } else {
             pawnPos = ((this.Player.PiecesPosition[0] & 0xfefefefefefefefeL) << 7) | ((this.Player.PiecesPosition[0] & 0x7f7f7f7f7f7f7f7fL) << 9);
-            if ((myKing & pawnPos) != 0) return true;
+            if ((myKing & pawnPos) != 0) return false;
 
             knightPos = (this.Player.PiecesPosition[2] & 0x7f7f7f7f7f7f7f7fL) << 17 |
                     (this.Player.PiecesPosition[2] & 0xfefefefefefefefeL) << 15 |
@@ -788,11 +788,11 @@ public class Game {
                     (this.Player.PiecesPosition[2] & 0x7f7f7f7f7f7f7f7fL) >>> 15 |
                     (this.Player.PiecesPosition[2] & 0xfcfcfcfcfcfcfcfcL) >>> 10 |
                     (this.Player.PiecesPosition[2] & 0x3f3f3f3f3f3f3f3fL) >>> 6;
-            if ((myKing & knightPos) != 0) return true;
+            if ((myKing & knightPos) != 0) return false;
 
-            if (this.Player.PiecesPosition[5] == 0x0L) return true;
+            if (this.Player.PiecesPosition[5] == 0x0L) return false;
             if ((myKing & KingAllPossibleMoves[Long.numberOfTrailingZeros(this.Player.PiecesPosition[5])]) != 0)
-                return true;
+                return false;
 
 
             temp = myKing << 8;
@@ -800,7 +800,7 @@ public class Game {
             {
                 if ((temp & this.AllOccupiedPlaces) != 0) {
                     if ((temp & (this.Player.PiecesPosition[1] | this.Player.PiecesPosition[4])) != 0)
-                        return true;
+                        return false;
                     break;
 
                 }
@@ -811,7 +811,7 @@ public class Game {
             {
                 if ((temp & this.AllOccupiedPlaces) != 0) {
                     if ((temp & (this.Player.PiecesPosition[1] | this.Player.PiecesPosition[4])) != 0)
-                        return true;
+                        return false;
                     break;
 
                 }
@@ -823,7 +823,7 @@ public class Game {
             {
                 if ((temp & this.AllOccupiedPlaces) != 0) {
                     if ((temp & (this.Player.PiecesPosition[1] | this.Player.PiecesPosition[4])) != 0)
-                        return true;
+                        return false;
                     break;
 
                 }
@@ -834,7 +834,7 @@ public class Game {
             {
                 if ((temp & this.AllOccupiedPlaces) != 0) {
                     if ((temp & (this.Player.PiecesPosition[1] | this.Player.PiecesPosition[4])) != 0)
-                        return true;
+                        return false;
                     break;
 
                 }
@@ -842,11 +842,11 @@ public class Game {
             }
 
             temp = myKing << 9;
-            for (int i = 0; i < minPlace; i++) // up right
+            for (int i = 0; i < minUpRightPlace; i++) // up right
             {
                 if ((temp & this.AllOccupiedPlaces) != 0) {
                     if ((temp & (this.Player.PiecesPosition[3] | this.Player.PiecesPosition[4])) != 0)
-                        return true;
+                        return false;
                     break;
                 }
                 temp <<= 9;
@@ -857,7 +857,7 @@ public class Game {
             {
                 if ((temp & this.AllOccupiedPlaces) != 0) {
                     if ((temp & (this.Player.PiecesPosition[3] | this.Player.PiecesPosition[4])) != 0)
-                        return true;
+                        return false;
                     break;
                 }
                 temp >>>= 7;
@@ -867,7 +867,7 @@ public class Game {
             {
                 if ((temp & this.AllOccupiedPlaces) != 0) {
                     if ((temp & (this.Player.PiecesPosition[3] | this.Player.PiecesPosition[4])) != 0)
-                        return true;
+                        return false;
                     break;
                 }
                 temp >>>= 9;
@@ -877,13 +877,13 @@ public class Game {
             {
                 if ((temp & this.AllOccupiedPlaces) != 0) {
                     if ((temp & (this.Player.PiecesPosition[3] | this.Player.PiecesPosition[4])) != 0)
-                        return true;
+                        return false;
                     break;
                 }
                 temp <<= 7;
             }
         }
-        return false;
+        return true;
     }
 
     public void DoMove(Move move) {
