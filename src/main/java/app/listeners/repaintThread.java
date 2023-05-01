@@ -1,14 +1,13 @@
-package Listeners;
+package app.listeners;
 
-import Chess.ChessBoard;
-import Chess.Move;
+import app.chess.ChessBoard;
+import app.chess.Move;
 
 class PlayerMoveAndRepaint extends Thread {
-    public ChessBoard cb;
-    public Move move;
+    public final ChessBoard cb;
+    public final Move move;
 
-    public PlayerMoveAndRepaint(ChessBoard cb, Move move)//(ChessBoard cb)
-    {
+    public PlayerMoveAndRepaint(ChessBoard cb, Move move) {
         this.cb = cb;
         this.move = move;
     }
