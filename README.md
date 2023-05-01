@@ -1,4 +1,4 @@
-# src.main.java.app.chess App
+# Chess App #
 
 My chess application written in java using nega-max algorithm and alpha beta pruning
 
@@ -16,7 +16,11 @@ My chess application written in java using nega-max algorithm and alpha beta pru
 
 ![img.png](doc/chess_board.png)
 
-## Possible moves highlighted with green, last move highlighted with light blue ##
+## Color Meaning
+* Possible moves highlighted with green
+* last move highlighted with light blue
+* current piece picked highlighted with light gray
+##
 ![](doc/possibleMoves.png)
 
 
