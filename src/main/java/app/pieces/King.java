@@ -35,7 +35,7 @@ public class King {
             emptyOrOpPossiblePlaces = KingAllPossibleMoves[place] & (game.ComputerOccupiedPlaces | ~game.PlayerOccupiedPlaces);
             PossibleMoves |= emptyOrOpPossiblePlaces;
 
-            if (!game.isKingUnderThreat(true)) {
+            if (game.isKingNotUnderThreat(true)) {
                 if (((game.AllOccupiedPlaces | game.getComputerPossibleMovesLong()) & (bit << 2 | bit << 1)) == 0 && game.PlayerRightCastling)
                     PossibleMoves |= bit << 2;
                 if (((game.AllOccupiedPlaces | game.getComputerPossibleMovesLong()) & rightShift) == 0 && game.PlayerLeftCastling)
@@ -47,7 +47,7 @@ public class King {
             PossibleMoves |= emptyOrOpPossiblePlaces;
 
             //castling part.
-            if (!game.isKingUnderThreat(false)) {
+            if (game.isKingNotUnderThreat(false)) {
                 if (((game.AllOccupiedPlaces | game.getPlayerPossibleMovesLong()) & (bit << 2 | bit << 1)) == 0 && game.ComputerRightCastling)
                     PossibleMoves |= bit << 2;
                 if (((game.AllOccupiedPlaces | game.getPlayerPossibleMovesLong()) & rightShift) == 0 && game.ComputerLeftCastling)
